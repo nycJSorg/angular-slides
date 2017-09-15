@@ -19,6 +19,7 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "ng",
       "styles": [
+        "scss/ng-slides.scss",
         "styles.scss"
       ],
       "scripts": [],
