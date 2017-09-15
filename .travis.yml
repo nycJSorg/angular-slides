@@ -13,3 +13,27 @@ before_deploy:
       node build/dev.js;
     fi
   - cd ./dist
+deploy:
+  - provider: npm
+    email: $EMAIL_ADDRESS
+    api_key: $NPM_API
+    skip_cleanup: true
+    on:
+      branch: master
+      tags: true
+  - provider: npm
+    email: $EMAIL_ADDRESS
+    api_key: $NPM_API
+    skip_cleanup: true
+    tag: nightly
+    on:
+      branch: dev
+      condition: "\"$TRAVIS_EVENT_TYPE\" == \"cron\""
+  - provider: npm
+    email: $EMAIL_ADDRESS
+    api_key: $NPM_API
+    skip_cleanup: true
+    tag: dev
+    on:
+      branch: dev
+      condition: "\"$TRAVIS_EVENT_TYPE\" != \"cron\""
