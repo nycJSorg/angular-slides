@@ -5,12 +5,16 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --prod --aot",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "package": "ng-packagr -p ng-package.json && node-sass src/scss/ng-slides.scss -o dist/ && cp -R src/scss dist/scss",
+    "release:major": "changelog -M && git add . && git commit -m 'chore(release): major version release' && npm version major && git push origin && git push origin --tags",
+    "release:minor": "changelog -m && git add . && git commit -m 'chore(release): minor version release' && npm version minor && git push origin && git push origin --tags",
+    "release:patch": "changelog -p && git add . && git commit -m 'chore(release): patch version release' && npm version patch && git push origin && git push origin --tags"
   },
-  "private": true,
+  "private": false,
   "dependencies": {
     "@angular/animations": "^4.2.4",
     "@angular/common": "^4.2.4",
@@ -33,6 +37,7 @@
     "@types/jasminewd2": "~2.0.2",
     "@types/node": "~6.0.60",
     "codelyzer": "~3.1.1",
+    "generate-changelog": "^1.4.0",
     "jasmine-core": "~2.6.2",
     "jasmine-spec-reporter": "~4.1.0",
     "karma": "~1.7.0",
@@ -41,6 +46,8 @@
     "karma-coverage-istanbul-reporter": "^1.2.1",
     "karma-jasmine": "~1.1.0",
     "karma-jasmine-html-reporter": "^0.2.2",
+    "ng-packagr": "^1.0.1",
+    "node-sass": "^4.5.3",
     "protractor": "~5.1.2",
     "ts-node": "~3.2.0",
     "tslint": "~5.3.2",

@@ -1,0 +1,15 @@
+language: node_js
+sudo: true
+node_js:
+  - 8
+install:
+  - npm install
+script:
+  - npm run package
+before_deploy:
+  - if [ ${TRAVIS_EVENT_TYPE} == "cron" ]; then
+      node build/nightly.js;
+    elif [ ${TRAVIS_BRANCH} == "dev" ]; then
+      node build/dev.js;
+    fi
+  - cd ./dist
