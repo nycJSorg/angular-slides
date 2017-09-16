@@ -1,0 +1,27 @@
+.progress-bar {
+  transition: height .5s;
+  display: flex;
+  flex-direction: row;
+  height: 5px;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  .progress-notch {
+    flex-grow: 1;
+    background-color: #abb7b7;
+    &.completed {
+      background-color: #f89406;
+    }
+    &:hover {
+      -webkit-filter: brightness(125%);
+      filter: brightness(125%);
+    }
+  }
+  &:hover {
+    height: 25px;
+    transition: height .5s;
+  }
+}
+

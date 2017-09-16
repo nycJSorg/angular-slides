@@ -1,0 +1,3 @@
+<div class="progress-bar" *ngIf="count | async">
+  <div *ngFor="let i of counter((count | async))" class="progress-notch" [class.completed]="i <= (active | async)" (click)="goTo(i)"></div>
+</div>

@@ -2,11 +2,12 @@ import {
   Component, Input, Output, AfterContentInit, OnChanges, OnDestroy,
   EventEmitter, ContentChildren, QueryList, HostListener
 } from '@angular/core';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/observable/timer';
 
-import { SlideComponent } from '../slide/slide.component';
+import { SlideComponent } from '../slide';
 
 @Component({
   selector: 'ng-slides',
@@ -14,8 +15,9 @@ import { SlideComponent } from '../slide/slide.component';
   styleUrls: ['./slides.component.scss']
 })
 export class SlidesComponent implements AfterContentInit, OnChanges, OnDestroy {
-  private _active: number;
+  private _active: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   @Output() change: EventEmitter<number> = new EventEmitter();
+  private _count: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   private _duration: number;
   @Input()
   set duration(duration: number) {
@@ -39,10 +41,10 @@ export class SlidesComponent implements AfterContentInit, OnChanges, OnDestroy {
 
   ngAfterContentInit() {
     if (this.slides.length > 0) {
-      this._active = 0;
-      this._activateSlide(this._active);
+      this._count.next(this.slides.length);
+      this._active.next(0);
+      this._activateSlide(this._active.value);
     }
-
     this._intervalSet();
   }
 
@@ -55,12 +57,12 @@ export class SlidesComponent implements AfterContentInit, OnChanges, OnDestroy {
     this._intervalClear();
   }
 
-  get active(): number {
-    return this._active;
+  get active(): Observable<number> {
+    return this._active.asObservable();
   }
 
-  get count(): number {
-    return this.slides.length;
+  get count(): Observable<number> {
+    return this._count.asObservable();
   }
 
   get fullscreen(): boolean {
@@ -73,9 +75,9 @@ export class SlidesComponent implements AfterContentInit, OnChanges, OnDestroy {
   }
 
   public back(): void {
-    this._deactivate(this._active);
-    if (this._active > 0) { this._active--; }
-    this._activateSlide(this._active);
+    this._deactivate(this._active.value);
+    if (this._active.value > 0) { this._active.next(this._active.value - 1); }
+    this._activateSlide(this._active.value);
     this._intervalClear();
     this._intervalSet();
   }
@@ -86,9 +88,9 @@ export class SlidesComponent implements AfterContentInit, OnChanges, OnDestroy {
 
   public goTo(slide: number): void {
     if (slide >= 0 && slide < this.slides.length) {
-      this._deactivate(this._active);
-      this._active = slide;
-      this._activateSlide(this._active);
+      this._deactivate(this._active.value);
+      this._active.next(slide);
+      this._activateSlide(this._active.value);
       this._intervalClear();
       this._intervalSet();
     }
@@ -119,9 +121,9 @@ export class SlidesComponent implements AfterContentInit, OnChanges, OnDestroy {
   }
 
   public next(): void {
-    this._deactivate(this._active);
-    if (this._active < (this.slides.length - 1)) { this._active++; }
-    this._activateSlide(this._active);
+    this._deactivate(this._active.value);
+    if (this._active.value < (this.slides.length - 1)) { this._active.next(this._active.value + 1); }
+    this._activateSlide(this._active.value);
     this._intervalClear();
     this._intervalSet();
   }

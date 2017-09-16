@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SlidesComponent } from './slides/slides.component';
 import { SlideComponent } from './slide/slide.component';
+import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 
 @NgModule({
   imports: [
@@ -9,11 +10,13 @@ import { SlideComponent } from './slide/slide.component';
   ],
   declarations: [
     SlidesComponent,
-    SlideComponent
+    SlideComponent,
+    ProgressBarComponent
   ],
   exports: [
     SlidesComponent,
-    SlideComponent
+    SlideComponent,
+    ProgressBarComponent
   ]
 })
 export class NgSlidesModule { }
